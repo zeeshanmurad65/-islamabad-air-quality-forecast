@@ -1,0 +1,17 @@
+# virtual environment
+forcast-project/
+
+# python junk
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# experiment tracking
+mlruns/
+
+# secrets
+.env
+
+# editor / OS files
+.vscode/
+.DS_Store
