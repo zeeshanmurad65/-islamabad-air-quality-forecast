@@ -1,0 +1,25 @@
+# .github/workflows/collect.yml
+name: Daily AQI collector
+on:
+  schedule:
+    - cron: "0 1 * * *"     # 01:00 UTC = 06:00 Pakistan time
+  workflow_dispatch:         # lets you run it manually to test
+permissions:
+  contents: write            # needed to commit the CSV back
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install requests pandas
+      - run: python src/collects.py
+      - name: Commit new data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/raw/islamabad_aqi.csv
+          git diff --cached --quiet || git commit -m "Update AQI data"
+          git push
